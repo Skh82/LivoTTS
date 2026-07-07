@@ -1,0 +1,79 @@
+{
+  "paths": {
+    "spm_model": "assets/other/fa_bpe_1024.model",
+    "shards_dir": "assets/shards",
+    "ckpt_dir": "assets"
+  },
+  "text_encoder": {
+    "dim": 1024,
+    "heads": 16,
+    "n_layers": 12,
+    "dropout": 0.1,
+    "rotary": true
+  },
+  "attentive": {
+    "type": "GLA",
+    "params": {
+      "d_model": 512,
+      "n_layer": 6,
+      "heads": 8,
+      "dropout_att": 0.1,
+      "dropout": 0.0,
+      "d_blind": null,
+      "blind": true,
+      "cross_att_pp": false,
+      "rotary": false,
+      "use_short_conv": true,
+      "expand_k": 0.5,
+      "expand_v": 1.0,
+      "pos_type": "convolutional"
+    }
+  },
+  "model": {
+    "d_model": 512,
+    "txt_dim": 1024,
+    "n_quant": 1,
+    "n_codebook": 8192,
+    "n_special_token_in": 3,
+    "n_special_token_out": 3,
+    "n_txt_vocab": 1024,
+    "tie_embed": false,
+    "mask_text_p": 0.0
+  },
+  "speaker_bank": {
+    "enabled": false,
+    "num_speakers": 33,
+    "lora_rank": null,
+    "init_scale": 0.02
+  },
+  "trainer": {
+    "seed": 1234,
+    "gradient_accumulation_steps": 1,
+    "checkpointing": {
+      "keep_last": 10
+    },
+    "optimizer": {
+      "type": "adamw",
+      "trunk": { "lr": 0.0002, "weight_decay": 0.1 },
+      "clip_grad_norm": 2.0,
+      "local_epochs": 5
+    },
+    "scheduler": {
+      "type": "cosine_with_warmup",
+      "warmup_steps": 15000,
+      "total_steps": 500000
+    },
+    "dataloader": {
+      "num_workers": 4,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "fixed_batch_size": 16,
+      "n_buckets": 12,
+      "shuffle": true,
+      "drop_last": true,
+      "interleave": true,
+      "bucket_temp": 0.7,
+      "longest_first": false
+    }
+  }
+}
